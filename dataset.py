@@ -6,17 +6,25 @@ import torch
 from torch import Tensor
 import math
 
+spacy_en = None
+spacy_es = None
+
 # Run this before running tokenize function
 def load_tokenizer():
-  spacy_en = spacy.load("en_core_web_sm")
-  spacy_es = spacy.load("es_core_news_sm")
+  global spacy_en, spacy_es
+  if spacy_en is None:
+    spacy_en = spacy.load("en_core_web_sm")
+  if spacy_es is None:
+    spacy_es = spacy.load("es_core_news_sm")
 
 # Tokenize function -> Takes in raw text dataset(individual column) and string 'en' or 'es' to specify english or spanish
 def tokenize(text, language):
-  if language == 'en':
+  if language == "en":
     return [token.text for token in spacy_en.tokenizer(text)]
-  elif language == 'es':
+  elif language == "es":
     return [token.text for token in spacy_es.tokenizer(text)]
+  else:
+    raise ValueError("Unsupported language")
 
 
 # Numericalize the all_tokens array
